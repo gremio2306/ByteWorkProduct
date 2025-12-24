@@ -9,7 +9,7 @@ export default function Navbar({ query, setQuery, onBell }) {
           </div>
           <div className="leading-tight">
             <h1 className="font-semibold text-slate-900">Guitar Store</h1>
-            <p className="text-xs text-slate-500">Simple • Elegan • Cepat</p>
+           
           </div>
         </div>
 
