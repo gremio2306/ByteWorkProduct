@@ -1,8 +1,6 @@
-// src/pages/Home.jsx
 import { useMemo, useState } from "react";
 import Navbar from "../components/public/Navbar";
 import ProductCard from "../components/public/ProductCard";
-import Footer from "../components/public/Footer";
 import dummyProducts from "../data/dummyProducts";
 
 export default function Home() {
@@ -26,22 +24,14 @@ export default function Home() {
 
   const onBell = () => {
     console.log("Bell clicked");
-    alert("Notifikasi diklik (cek console)");
   };
 
   const onBuy = (p) => {
     console.log("Beli:", p);
-    alert(`Beli: ${p.name} (cek console)`);
   };
 
   const onFav = (p) => {
     console.log("Favorit:", p);
-    alert(`Favorit: ${p.name} (cek console)`);
-  };
-
-  const onDetail = (p) => {
-    console.log("Detail:", p);
-    alert(`Detail: ${p.name}\nKategori: ${p.category}\nStok: ${p.stock}`);
   };
 
   return (
@@ -50,11 +40,9 @@ export default function Home() {
 
       <main className="max-w-6xl mx-auto px-6 py-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
-              Katalog Produk
-            </h2>
-          </div>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
+            Katalog Produk
+          </h2>
 
           <div className="flex items-center gap-3">
             <label className="text-sm text-slate-600">Kategori</label>
@@ -62,7 +50,6 @@ export default function Home() {
               value={category}
               onChange={(e) => {
                 setCategory(e.target.value);
-                console.log("Filter kategori:", e.target.value);
               }}
               className="rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-slate-200"
             >
@@ -80,19 +67,10 @@ export default function Home() {
               product={p}
               onBuy={onBuy}
               onFav={onFav}
-              onDetail={onDetail}
             />
           ))}
         </div>
-
-        {filtered.length === 0 && (
-          <div className="mt-12 text-center text-slate-600">
-            Produk tidak ditemukan.
-          </div>
-        )}
       </main>
-
-      <Footer />
     </div>
   );
 }

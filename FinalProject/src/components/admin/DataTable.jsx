@@ -1,6 +1,6 @@
 const rupiah = (n) => new Intl.NumberFormat("id-ID").format(n);
 
-export default function DataTable({ data }) {
+export default function DataTable({ data = [] }) {
   return (
     <div className="border rounded-2xl bg-white overflow-hidden shadow-sm">
       <div className="p-5 border-b flex items-center justify-between">
@@ -27,7 +27,9 @@ export default function DataTable({ data }) {
                 <td className="p-3 border-b">
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      p.stock > 0 ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"
+                      p.stock > 0
+                        ? "bg-emerald-100 text-emerald-700"
+                        : "bg-rose-100 text-rose-700"
                     }`}
                   >
                     {p.stock > 0 ? p.stock : "Habis"}
@@ -51,8 +53,15 @@ export default function DataTable({ data }) {
                 </td>
               </tr>
             ))}
-          </tbody>
 
+            {data.length === 0 && (
+              <tr>
+                <td colSpan="4" className="p-4 text-center text-slate-500">
+                  Tidak ada data produk
+                </td>
+              </tr>
+            )}
+          </tbody>
         </table>
       </div>
     </div>

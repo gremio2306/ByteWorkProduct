@@ -1,7 +1,8 @@
-// src/components/public/ProductCard.jsx
+import { Link } from "react-router-dom";
+
 const rupiah = (n) => new Intl.NumberFormat("id-ID").format(n);
 
-export default function ProductCard({ product, onBuy, onFav, onDetail }) {
+export default function ProductCard({ product, onBuy, onFav }) {
   const inStock = product.stock > 0;
 
   return (
@@ -35,15 +36,19 @@ export default function ProductCard({ product, onBuy, onFav, onDetail }) {
         <div className="mt-3 flex items-end justify-between">
           <div>
             <p className="text-xs text-slate-500">Harga</p>
-            <p className="text-lg font-bold text-slate-900">Rp {rupiah(product.price)}</p>
+            <p className="text-lg font-bold text-slate-900">
+              Rp {rupiah(product.price)}
+            </p>
           </div>
 
-          <button
-            onClick={() => onDetail(product)}
+          {/* CP2: Link ke dynamic route + tetap log */}
+          <Link
+            to={`/detail-produk/${product.id}`}
+            onClick={() => console.log("Open detail:", product.id)}
             className="text-sm px-3 py-2 rounded-2xl border border-slate-200 hover:bg-slate-50 active:scale-[0.98] transition"
           >
             Detail
-          </button>
+          </Link>
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3">

@@ -1,4 +1,3 @@
-
 // src/data/dummyProducts.jsx
 const dummyProducts = [
   {
