@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 
 import Home from "./pages/Home.jsx";
@@ -8,16 +8,14 @@ import ProductDetail from "./pages/ProductDetail.jsx";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Public */}
-        <Route path="/" element={<Home />} />
-        <Route path="/detail-produk/:id" element={<ProductDetail />} />
+    <Routes>
+      {/* Public */}
+      <Route path="/" element={<Home />} />
+      <Route path="/detail-produk/:id" element={<ProductDetail />} />
 
-        {/* Admin */}
-        <Route path="/admin" element={<AdminDashboard />} />
-      </Routes>
-    </Router>
+      {/* Admin */}
+      <Route path="/admin" element={<AdminDashboard />} />
+    </Routes>
   );
 }
 
