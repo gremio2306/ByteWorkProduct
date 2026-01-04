@@ -11,8 +11,8 @@ export default function Navbar({ query, setQuery, onBell }) {
             <h1 className="font-semibold text-slate-900">Guitar Store</h1>
            
           </div>
+          {/* <buassName="ml-2 text-sm text-slate-500 hover:text-slate-700">Login</button> */}
         </div>
-
         <div className="flex-1">
           <input
             value={query}
