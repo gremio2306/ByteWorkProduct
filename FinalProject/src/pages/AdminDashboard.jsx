@@ -1,41 +1,83 @@
-import FormData from "../components/admin/FormData";
-import DataTable from "../components/admin/DataTable";
-import dummyProducts from "../data/dummyProducts"; // sesuaikan nama file kamu
+import { useMemo, useState } from "react";
+
+import AdminLayout from "../components/admin/AdminLayout.jsx";
+import FormData from "../components/admin/FormData.jsx";
+import DataTable from "../components/admin/DataTable.jsx";
+
+import dummyProducts from "../data/dummyProducts";
 
 export default function AdminDashboard() {
-  // kalau kamu sudah punya state/data sendiri, pakai itu.
-  const data = dummyProducts ?? [];
+  const [data, setData] = useState(dummyProducts ?? []);
+  const [query, setQuery] = useState("");
+
+  const [mode, setMode] = useState("add"); // add | edit
+  const [selected, setSelected] = useState(null);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return data;
+    return data.filter((p) => (p.name || "").toLowerCase().includes(q));
+  }, [data, query]);
+
+  const handleSave = (payload) => {
+    if (mode === "add") {
+      setData((prev) => [{ id: Date.now(), ...payload }, ...prev]);
+      return;
+    }
+
+    // edit mode
+    if (!selected) return;
+
+    setData((prev) =>
+      prev.map((x) => (x.id === selected.id ? { ...x, ...payload } : x))
+    );
+    setMode("add");
+    setSelected(null);
+  };
+
+  const handleEdit = (p) => {
+    setMode("edit");
+    setSelected(p);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleDelete = (id) => {
+    setData((prev) => prev.filter((x) => x.id !== id));
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Top Bar */}
-      <div className="border-b bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-5 flex items-center justify-between">
-          <div>
-            <h1 className="text-xl md:text-2xl font-bold text-slate-900">
-              Admin Dashboard
-            </h1>
-          </div>
+    <AdminLayout>
+      <div className="grid gap-4">
+        {/* Header konten */}
+        <div className="rounded-2xl border bg-white shadow-sm p-4 sm:p-5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h1 className="text-lg font-semibold text-slate-900">📁 Data Barang</h1>
+              <p className="text-xs text-slate-500">
+                Kelola produk (Table • Input • Dialog)
+              </p>
+            </div>
 
-          <div className="hidden md:flex items-center gap-2">
-            <span className="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-600">
-              Total Produk: {data.length}
-            </span>
-            <span className="text-xs px-3 py-1 rounded-full bg-emerald-50 text-emerald-700">
-              Status: Active
-            </span>
+            <div className="w-full sm:w-[360px]">
+              <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2">
+                <span className="text-slate-400">🔎</span>
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Cari barang di sini..."
+                  className="w-full text-sm outline-none"
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Content */}
-      <div className="mx-auto max-w-6xl px-4 py-6 grid gap-6">
-        {/* Form */}
-        <FormData />
+        {/* Form tambah / edit */}
+        <FormData mode={mode} initialValue={selected} onSave={handleSave} />
 
         {/* Table */}
-        <DataTable data={data} />
+        <DataTable data={filtered} onEdit={handleEdit} onDelete={handleDelete} />
       </div>
-    </div>
+    </AdminLayout>
   );
 }
