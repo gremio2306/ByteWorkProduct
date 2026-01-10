@@ -5,9 +5,9 @@ import "./App.css";
 import Home from "./pages/Home.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
 
-// ADMIN
-import AdminHome from "./components/admin/AdminHome.jsx"; // Dashboard admin (baru)
-import AdminDashboard from "./pages/AdminDashboard.jsx"; // Data Barang (CRUD)
+// Admin
+import AdminHome from "./components/admin/AdminHome.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 
 import EntryPenjualan from "./components/admin/EntryPenjualan.jsx";
 import GantiFoto from "./components/admin/GantiFoto.jsx";

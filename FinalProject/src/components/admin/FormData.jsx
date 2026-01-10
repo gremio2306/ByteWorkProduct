@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input.jsx";
+import { Save, RotateCcw } from "lucide-react";
 
-const empty = { name: "", price: "", stock: "" };
-
-export default function FormData({ mode = "add", initialValue, onSave }) {
-  const [form, setForm] = useState(empty);
-  const [error, setError] = useState("");
+export default function FormData({ mode = "add", initialValue = null, onSave }) {
+  const [form, setForm] = useState({ name: "", price: "", stock: "" });
 
   useEffect(() => {
-    setError("");
     if (mode === "edit" && initialValue) {
       setForm({
         name: initialValue.name ?? "",
@@ -16,7 +13,7 @@ export default function FormData({ mode = "add", initialValue, onSave }) {
         stock: String(initialValue.stock ?? ""),
       });
     } else {
-      setForm(empty);
+      setForm({ name: "", price: "", stock: "" });
     }
   }, [mode, initialValue]);
 
@@ -24,27 +21,21 @@ export default function FormData({ mode = "add", initialValue, onSave }) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const validate = () => {
-    if (!form.name.trim()) return "Nama produk wajib diisi.";
-    if (form.price === "" || isNaN(Number(form.price)) || Number(form.price) <= 0)
-      return "Harga harus angka dan > 0.";
-    if (form.stock === "" || isNaN(Number(form.stock)) || Number(form.stock) < 0)
-      return "Stok harus angka dan >= 0.";
-    return "";
+  const onSubmit = () => {
+    const payload = {
+      name: form.name.trim(),
+      price: Number(form.price || 0),
+      stock: Number(form.stock || 0),
+    };
+
+    if (!payload.name) return alert("Nama produk wajib diisi.");
+    onSave?.(payload);
+
+    if (mode === "add") setForm({ name: "", price: "", stock: "" });
   };
 
-  const handleSave = () => {
-    const msg = validate();
-    if (msg) return setError(msg);
-
-    onSave?.({
-      name: form.name.trim(),
-      price: Number(form.price),
-      stock: Number(form.stock),
-    });
-
-    setForm(empty);
-    setError("");
+  const onReset = () => {
+    setForm({ name: "", price: "", stock: "" });
   };
 
   return (
@@ -54,7 +45,7 @@ export default function FormData({ mode = "add", initialValue, onSave }) {
           {mode === "edit" ? "Edit Produk" : "Tambah Produk"}
         </h2>
         <p className="text-xs text-slate-500">
-          Isi nama, harga, dan stok lalu simpan.
+          Form input untuk data produk (dummy).
         </p>
       </div>
 
@@ -95,29 +86,22 @@ export default function FormData({ mode = "add", initialValue, onSave }) {
         </div>
       </div>
 
-      {error && (
-        <div className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-          {error}
-        </div>
-      )}
-
       <div className="mt-5 flex flex-wrap gap-2">
         <button
-          className="rounded-xl bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 text-sm font-medium active:scale-[0.98] transition"
-          onClick={handleSave}
+          className="rounded-xl bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 text-sm font-medium active:scale-[0.98] transition inline-flex items-center gap-2"
+          onClick={onSubmit}
           type="button"
         >
+          <Save className="h-4 w-4" />
           {mode === "edit" ? "Simpan Perubahan" : "Simpan"}
         </button>
 
         <button
-          className="rounded-xl border border-slate-200 hover:bg-slate-50 px-4 py-2.5 text-sm font-medium active:scale-[0.98] transition"
-          onClick={() => {
-            setForm(empty);
-            setError("");
-          }}
+          className="rounded-xl border border-slate-200 hover:bg-slate-50 px-4 py-2.5 text-sm font-medium active:scale-[0.98] transition inline-flex items-center gap-2"
+          onClick={onReset}
           type="button"
         >
+          <RotateCcw className="h-4 w-4" />
           Reset
         </button>
       </div>

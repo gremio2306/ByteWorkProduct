@@ -1,5 +1,13 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Boxes,
+  BarChart3,
+  AlertTriangle,
+  DollarSign,
+  Flame,
+  Sparkles,
+} from "lucide-react";
 import AdminLayout from "./AdminLayout";
 import dummyProducts from "../../data/dummyProducts";
 
@@ -11,26 +19,22 @@ export default function AdminHome() {
   const computed = useMemo(() => {
     const data = dummyProducts ?? [];
 
-    const totalProduk = data.length;
     const stokHabisList = data.filter((p) => Number(p.stock) <= 0);
     const stokRendahList = data.filter(
       (p) => Number(p.stock) > 0 && Number(p.stock) < 3
     );
 
+    const totalProduk = data.length;
     const totalStok = data.reduce((acc, p) => acc + Number(p.stock || 0), 0);
     const totalNilaiStok = data.reduce(
       (acc, p) => acc + Number(p.price || 0) * Number(p.stock || 0),
       0
     );
 
-    // Produk terbaru: ambil 6 item pertama (asumsi data baru di atas)
     const terbaru = data.slice(0, 6);
-
-    // Gabung stok kritis: habis dulu, lalu rendah (maks 8)
     const kritis = [...stokHabisList, ...stokRendahList].slice(0, 8);
 
     return {
-      data,
       totalProduk,
       totalStok,
       totalNilaiStok,
@@ -61,7 +65,7 @@ export default function AdminHome() {
               onClick={() => nav("/admin/data-barang")}
               type="button"
             >
-              📁 Kelola Data Barang
+              Kelola Data Barang
             </button>
           </div>
         </div>
@@ -69,7 +73,10 @@ export default function AdminHome() {
         {/* Alert stok */}
         {(computed.stokHabis > 0 || computed.stokRendah > 0) && (
           <div className="rounded-2xl border bg-amber-50 border-amber-200 p-4 text-amber-900">
-            <div className="font-semibold">⚠️ Perhatian Stok</div>
+            <div className="flex items-center gap-2 font-semibold">
+              <AlertTriangle className="h-5 w-5" />
+              Perhatian Stok
+            </div>
             <div className="mt-1 text-sm">
               {computed.stokHabis > 0 && (
                 <div>
@@ -91,36 +98,37 @@ export default function AdminHome() {
             title="Total Produk"
             value={computed.totalProduk}
             desc="Jumlah item di katalog"
-            icon="📦"
+            Icon={Boxes}
           />
           <CardStat
             title="Total Stok"
             value={computed.totalStok}
             desc="Akumulasi stok semua produk"
-            icon="📊"
+            Icon={BarChart3}
           />
           <CardStat
             title="Stok Habis"
             value={computed.stokHabis}
             desc="Produk perlu restock"
-            icon="⛔"
+            Icon={AlertTriangle}
           />
           <CardStat
             title="Nilai Stok"
             value={`Rp ${rupiah(computed.totalNilaiStok)}`}
             desc="Estimasi nilai total stok"
-            icon="💰"
+            Icon={DollarSign}
           />
         </div>
 
-        {/* Fitur penting: Stok kritis + Produk terbaru */}
+        {/* Stok kritis + Produk terbaru */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Stok Kritis */}
           <section className="rounded-2xl border bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between gap-2">
               <div>
-                <div className="text-base font-semibold text-slate-900">
-                  🔥 Stok Kritis
+                <div className="flex items-center gap-2 text-base font-semibold text-slate-900">
+                  <Flame className="h-5 w-5" />
+                  Stok Kritis
                 </div>
                 <p className="text-sm text-slate-500">
                   Produk habis / hampir habis (prioritas).
@@ -139,7 +147,7 @@ export default function AdminHome() {
             <div className="mt-4 grid gap-2">
               {computed.kritis.length === 0 ? (
                 <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-                  ✅ Aman! Tidak ada produk stok kritis.
+                  Aman! Tidak ada produk stok kritis.
                 </div>
               ) : (
                 computed.kritis.map((p) => (
@@ -176,8 +184,9 @@ export default function AdminHome() {
           <section className="rounded-2xl border bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between gap-2">
               <div>
-                <div className="text-base font-semibold text-slate-900">
-                  🆕 Produk Terbaru
+                <div className="flex items-center gap-2 text-base font-semibold text-slate-900">
+                  <Sparkles className="h-5 w-5" />
+                  Produk Terbaru
                 </div>
                 <p className="text-sm text-slate-500">
                   Daftar produk terbaru (dummy).
@@ -227,7 +236,7 @@ export default function AdminHome() {
   );
 }
 
-function CardStat({ title, value, desc, icon }) {
+function CardStat({ title, value, desc, Icon }) {
   return (
     <div className="rounded-2xl border bg-white p-4 shadow-sm">
       <div className="flex items-start justify-between">
@@ -236,7 +245,7 @@ function CardStat({ title, value, desc, icon }) {
           <div className="mt-1 text-2xl font-bold text-slate-900">{value}</div>
           <div className="mt-1 text-xs text-slate-500">{desc}</div>
         </div>
-        <div className="text-2xl">{icon}</div>
+        <Icon className="h-6 w-6 text-slate-500" />
       </div>
     </div>
   );

@@ -10,7 +10,6 @@ export default function AdminHeader({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="font-bold text-lg">Admin Guitar Store</h1>
-          <p className="text-xs text-white/70">Kelola data produk (Table • Input • Dialog)</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
