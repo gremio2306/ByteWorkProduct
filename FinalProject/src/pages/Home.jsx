@@ -1,6 +1,6 @@
 // src/pages/Home.jsx
 import React from "react";
-import dummyProducts from "../data/dummyProducts.jsx";
+import { getProducts } from "../services/ProductsApi";
 import ProductCard from "../components/public/ProductCard.jsx";
 
 const ALL = "All Categories";
@@ -104,33 +104,59 @@ function HeroBanner({ q, setQ }) {
 
 /* ================= PAGE ================= */
 export default function Home() {
-  const categories = React.useMemo(() => {
-    const set = new Set(dummyProducts.map((p) => p.category));
-    return [ALL, ...Array.from(set)];
+    // ================== STATE DATA API (CP3) ==================
+  const [apiProducts, setApiProducts] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
+
+  // ambil data dari MockAPI
+  const loadProducts = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getProducts();
+      setApiProducts(data);
+    } catch (err) {
+      setError(err.message || "Terjadi error saat mengambil data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // jalan sekali saat halaman Home dibuka
+  React.useEffect(() => {
+    loadProducts();
   }, []);
+
+
+
+    const categories = React.useMemo(() => {
+    const set = new Set(apiProducts.map((p) => p.category));
+    return [ALL, ...Array.from(set)];
+  }, [apiProducts]);
+
 
   const [q, setQ] = React.useState("");
   const [category, setCategory] = React.useState(ALL);
   const [quickFilter, setQuickFilter] = React.useState("none");
 
-  const products = React.useMemo(() => {
-    let base = [...dummyProducts];
+    const products = React.useMemo(() => {
+    let base = [...apiProducts];
 
     if (category !== ALL) base = base.filter((p) => p.category === category);
 
     if (q.trim()) {
-      base = base.filter((p) =>
-        p.name.toLowerCase().includes(q.toLowerCase())
-      );
+      base = base.filter((p) => p.name.toLowerCase().includes(q.toLowerCase()));
     }
 
-    if (quickFilter === "inStock") base = base.filter((p) => p.stock > 0);
-    else if (quickFilter === "outOfStock") base = base.filter((p) => p.stock === 0);
-    else if (quickFilter === "priceLow") base.sort((a, b) => a.price - b.price);
-    else if (quickFilter === "priceHigh") base.sort((a, b) => b.price - a.price);
+    if (quickFilter === "inStock") base = base.filter((p) => Number(p.stock) > 0);
+    else if (quickFilter === "outOfStock") base = base.filter((p) => Number(p.stock) === 0);
+    else if (quickFilter === "priceLow") base.sort((a, b) => Number(a.price) - Number(b.price));
+    else if (quickFilter === "priceHigh") base.sort((a, b) => Number(b.price) - Number(a.price));
 
     return base;
-  }, [q, category, quickFilter]);
+  }, [q, category, quickFilter, apiProducts]);
+
 
   const QBtn = ({ id, label }) => {
     const active = quickFilter === id;
@@ -148,6 +174,36 @@ export default function Home() {
     );
   };
 
+    if (loading) {
+    return (
+      <div className="w-full bg-[rgb(var(--bg-soft))]">
+        <div className="mx-auto max-w-[1600px] px-4 py-10 lg:px-10">
+          <p className="text-sm font-extrabold text-[rgb(var(--navy-900))]">
+            Loading products...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full bg-[rgb(var(--bg-soft))]">
+        <div className="mx-auto max-w-[1600px] px-4 py-10 lg:px-10">
+          <p className="text-sm font-extrabold text-red-600">Error: {error}</p>
+
+          <button
+            onClick={loadProducts}
+            className="mt-4 h-10 rounded-xl bg-[rgb(var(--navy-900))] px-4 text-sm font-extrabold text-white"
+          >
+            Coba lagi
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+
   return (
     <div className="w-full bg-[rgb(var(--bg-soft))]">
       <div className="mx-auto max-w-[1600px] px-4 py-6 lg:px-10">
@@ -162,17 +218,17 @@ export default function Home() {
                   CATEGORY
                 </div>
                 <div className="text-xs font-bold text-[rgb(var(--navy-900))]">
-                  {dummyProducts.length}
+                  {apiProducts.length}
                 </div>
               </div>
 
               <div className="mt-3 space-y-1">
                 {categories.map((c) => {
                   const active = c === category;
-                  const count =
-                    c === ALL
-                      ? dummyProducts.length
-                      : dummyProducts.filter((p) => p.category === c).length;
+                 const count =
+                     c === ALL
+                      ? apiProducts.length
+                     : apiProducts.filter((p) => p.category === c).length;
 
                   return (
                     <button

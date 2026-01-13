@@ -8,7 +8,7 @@ import ProductDetail from "./pages/ProductDetail.jsx";
 
 // Public components
 import Navbar from "./components/public/Navbar.jsx";
-import Footer from "./components/public/Footer.jsx";
+import Footer from "./components/public/Footer.jsx"; 
 import HelpModal from "./components/public/HelpModal.jsx";
 import CartDrawer from "./components/CartDrawer.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
