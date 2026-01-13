@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Boxes,
@@ -9,15 +9,36 @@ import {
   Sparkles,
 } from "lucide-react";
 import AdminLayout from "./AdminLayout";
-import dummyProducts from "../../data/dummyProducts";
+import { getProducts } from "../../services/productsApi";
 
 const rupiah = (n) => new Intl.NumberFormat("id-ID").format(Number(n || 0));
 
 export default function AdminHome() {
   const nav = useNavigate();
 
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const load = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getProducts();
+      setProducts(data);
+    } catch (e) {
+      setError(e.message || "Gagal mengambil data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
   const computed = useMemo(() => {
-    const data = dummyProducts ?? [];
+    const data = products ?? [];
 
     const stokHabisList = data.filter((p) => Number(p.stock) <= 0);
     const stokRendahList = data.filter(
@@ -43,7 +64,7 @@ export default function AdminHome() {
       kritis,
       terbaru,
     };
-  }, []);
+  }, [products]);
 
   return (
     <AdminLayout>
@@ -56,17 +77,36 @@ export default function AdminHome() {
                 Dashboard Admin
               </h1>
               <p className="mt-1 text-sm text-slate-500">
-                Ringkasan data, stok kritis, dan produk terbaru.
+                Ringkasan data, stok kritis, dan produk terbaru (MockAPI).
               </p>
+
+              {loading && (
+                <p className="mt-2 text-xs text-slate-500">Loading data...</p>
+              )}
+              {error && (
+                <p className="mt-2 text-xs font-semibold text-rose-600">
+                  Error: {error}
+                </p>
+              )}
             </div>
 
-            <button
-              className="mt-2 sm:mt-0 rounded-xl bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 text-sm font-medium transition"
-              onClick={() => nav("/admin/data-barang")}
-              type="button"
-            >
-              Kelola Data Barang
-            </button>
+            <div className="flex gap-2">
+              <button
+                className="mt-2 sm:mt-0 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-900 px-4 py-2 text-sm font-medium transition"
+                onClick={load}
+                type="button"
+              >
+                Refresh
+              </button>
+
+              <button
+                className="mt-2 sm:mt-0 rounded-xl bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 text-sm font-medium transition"
+                onClick={() => nav("/admin/data-barang")}
+                type="button"
+              >
+                Kelola Data Barang
+              </button>
+            </div>
           </div>
         </div>
 
@@ -189,7 +229,7 @@ export default function AdminHome() {
                   Produk Terbaru
                 </div>
                 <p className="text-sm text-slate-500">
-                  Daftar produk terbaru (dummy).
+                  Daftar produk terbaru (MockAPI).
                 </p>
               </div>
 
