@@ -11,7 +11,7 @@ const rupiah = (n) =>
   }).format(n);
 
 // 🔧 GANTI NOMOR WA KAMU (format: 628xxxxxxxxxx)
-const WHATSAPP_NUMBER = "6281234567890";
+const WHATSAPP_NUMBER = "6285652244246";
 
 function stockBadge(stock) {
   if (stock === 0) {

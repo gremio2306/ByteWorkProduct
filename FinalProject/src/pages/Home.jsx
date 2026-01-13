@@ -12,19 +12,19 @@ function HeroBanner({ q, setQ }) {
       title: "Promo Minggu Ini",
       desc: "Belanja alat musik favoritmu — cepat, rapi, dan responsif.",
       tag: "HOT OFFERS",
-      image: "https://picsum.photos/seed/hero-guitar/1600/700",
+      image: "https://i.pinimg.com/736x/78/3c/80/783c80ec40f5801c6925f8213f99f683.jpg",
     },
     {
       title: "Gitar Electric untuk Rock",
       desc: "Tone tajam, sustain mantap, dan tampilan modern.",
       tag: "ELECTRIC",
-      image: "https://picsum.photos/seed/hero-electric/1600/700",
+      image: "https://i.pinimg.com/1200x/fc/8b/1b/fc8b1b9ed780018e09d93a63d82309bf.jpg",
     },
     {
       title: "Ukulele untuk Daily Fun",
       desc: "Ringan, enak dimainkan, cocok untuk pemula.",
       tag: "UKULELE",
-      image: "https://picsum.photos/seed/hero-ukulele/1600/700",
+      image: "https://i.pinimg.com/1200x/a2/f7/a5/a2f7a5b4769b5b83a9fe5ee56ccc36fd.jpg",
     },
   ];
 

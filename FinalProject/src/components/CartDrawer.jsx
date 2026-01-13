@@ -5,6 +5,8 @@ import { useCart } from "../context/CartContext.jsx";
 const rupiah = (n) =>
   new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(n);
 
+const WHATSAPP_NUMBER = "6285652244246";
+
 export default function CartDrawer() {
   const { open, closeCart, items, subtotal, inc, dec, removeItem, clearCart } = useCart();
 
@@ -13,6 +15,31 @@ export default function CartDrawer() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [closeCart]);
+
+  const handleCheckoutWA = () => {
+  if (items.length === 0) return;
+
+  const lines = items.map((it, idx) => {
+    const itemTotal = Number(it.price || 0) * Number(it.qty || 1);
+    return `${idx + 1}. ${it.name} x${it.qty} = ${rupiah(itemTotal)}`;
+  });
+
+  const message = `
+Halo ByteWork Store 👋
+
+Saya ingin checkout pesanan berikut:
+${lines.join("\n")}
+
+Subtotal: ${rupiah(subtotal)}
+
+Mohon info cara order & pembayaran ya.
+Terima kasih 🙏
+  `.trim();
+
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+};
+
 
   return (
     <>
@@ -139,11 +166,13 @@ export default function CartDrawer() {
                 Clear
               </button>
               <button
-                disabled={items.length === 0}
-                className="h-10 rounded-xl bg-slate-900 text-sm font-extrabold text-white hover:bg-slate-800 disabled:opacity-50"
-              >
-                Checkout (Demo)
-              </button>
+  onClick={handleCheckoutWA}
+  disabled={items.length === 0}
+  className="h-10 rounded-xl bg-slate-900 text-sm font-extrabold text-white hover:bg-slate-800 disabled:opacity-50"
+>
+  Checkout via WhatsApp
+</button>
+
             </div>
 
             <div className="mt-2 text-xs text-slate-500">
