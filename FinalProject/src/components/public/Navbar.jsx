@@ -1,36 +1,65 @@
 // src/components/public/Navbar.jsx
-export default function Navbar({ query, setQuery, onBell }) {
-  return (
-    <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-4">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-2xl bg-slate-900 text-white grid place-items-center">
-            🎸
-          </div>
-          <div className="leading-tight">
-            <h1 className="font-semibold text-slate-900">Guitar Store</h1>
-           
-          </div>
-          {/* <buassName="ml-2 text-sm text-slate-500 hover:text-slate-700">Login</button> */}
-        </div>
-        <div className="flex-1">
-          <input
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              console.log("Search:", e.target.value);
-            }}
-            placeholder="Cari produk... (nama / kategori)"
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-slate-200"
-          />
-        </div>
+import React from "react";
+import { ShoppingBag } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartContext.jsx";
 
+export default function Navbar() {
+  const navigate = useNavigate();
+  const { items, openCart } = useCart();
+  const [scrolled, setScrolled] = React.useState(false);
+
+  const cartCount =
+    items?.reduce((total, item) => total + (item.qty || 0), 0) ?? 0;
+
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <header
+      className={`sticky top-0 z-50 w-full transition-all ${
+        scrolled
+          ? "bg-[rgba(11,28,45,0.92)] backdrop-blur border-b border-white/10"
+          : "bg-[rgb(var(--navy-900))]"
+      }`}
+    >
+      <div className="mx-auto flex h-16 w-full max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-10">
+        {/* Brand */}
         <button
-          onClick={onBell}
-          className="rounded-2xl border border-slate-200 px-4 py-3 hover:bg-slate-50 active:scale-[0.98] transition"
-          title="Notifikasi"
+          onClick={() => navigate("/")}
+          className="flex items-center gap-3"
         >
-          🔔
+          <div className="grid h-9 w-9 place-items-center rounded-xl bg-white text-[rgb(var(--navy-900))] shadow-sm">
+            <span className="text-sm font-black">BW</span>
+          </div>
+
+          <div className="leading-tight text-left">
+            <div className="text-base font-black text-white">
+              ByteWork Store
+            </div>
+            <div className="text-[11px] font-medium text-white/70">
+              Demo e-commerce
+            </div>
+          </div>
+        </button>
+
+        {/* Cart */}
+        <button
+          onClick={openCart}
+          className="relative inline-flex h-11 items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 text-sm font-extrabold text-white hover:bg-white/15 active:scale-[0.99]"
+        >
+          <ShoppingBag size={18} />
+          Keranjang
+
+          {cartCount > 0 && (
+            <span className="absolute -right-2 -top-2 grid h-6 min-w-6 place-items-center rounded-full bg-white px-2 text-xs font-black text-[rgb(var(--navy-900))] shadow">
+              {cartCount}
+            </span>
+          )}
         </button>
       </div>
     </header>

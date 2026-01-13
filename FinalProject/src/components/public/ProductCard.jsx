@@ -1,72 +1,128 @@
+import React from "react";
 import { Link } from "react-router-dom";
+import { ShoppingCart, Star } from "lucide-react";
+import { useCart } from "../../context/CartContext.jsx";
 
-const rupiah = (n) => new Intl.NumberFormat("id-ID").format(n);
+const rupiah = (n) =>
+  new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(n);
 
-export default function ProductCard({ product, onBuy, onFav }) {
-  const inStock = product.stock > 0;
+// 🔧 GANTI NOMOR WA KAMU (format: 628xxxxxxxxxx)
+const WHATSAPP_NUMBER = "6281234567890";
+
+function stockBadge(stock) {
+  if (stock === 0) {
+    return { text: "Habis", cls: "bg-rose-100 text-rose-700" };
+  }
+  return { text: `Stok ${stock}`, cls: "bg-emerald-100 text-emerald-700" };
+}
+
+export default function ProductCard({ p }) {
+  const { addItem } = useCart();
+  const stock = stockBadge(p.stock);
+
+  const ratingValue = typeof p.rating === "number" ? p.rating : 4.8;
+  const soldValue = typeof p.sold === "number" ? p.sold : 120;
+
+  const handleBuyWA = () => {
+    const message = `
+Halo ByteWork Store 👋
+
+Saya tertarik membeli:
+• ${p.name}
+• Harga: ${rupiah(p.price)}
+
+Mohon info cara ordernya ya.
+Terima kasih 🙏
+    `.trim();
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+      message
+    )}`;
+
+    window.open(url, "_blank");
+  };
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition">
-      <div className="relative h-44 bg-slate-100">
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
+      {/* IMAGE */}
+      <div className="relative">
         <img
-          src={product.image}
-          alt={product.name}
-          className="h-full w-full object-cover"
-          loading="lazy"
+          src={p.image}
+          alt={p.name}
+          className="h-48 w-full object-cover sm:h-52"
         />
-        <div className="absolute top-3 left-3 flex gap-2">
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/90 border">
-            {product.category}
+
+        {/* CATEGORY + STOCK */}
+        <div className="absolute left-3 top-3 flex gap-2">
+          <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-extrabold text-slate-800">
+            {p.category}
           </span>
           <span
-            className={`px-3 py-1 rounded-full text-xs font-medium ${
-              inStock ? "bg-emerald-600 text-white" : "bg-rose-600 text-white"
-            }`}
+            className={`rounded-full px-3 py-1 text-xs font-extrabold ${stock.cls}`}
           >
-            {inStock ? `Stok ${product.stock}` : "Habis"}
+            {stock.text}
           </span>
         </div>
       </div>
 
-      <div className="p-5">
-        <h3 className="font-semibold text-slate-900 leading-snug line-clamp-2">
-          {product.name}
-        </h3>
+      {/* CONTENT */}
+      <div className="p-4">
+        {/* NAMA PRODUK — navy medium */}
+        <div className="line-clamp-1 text-[15px] font-extrabold text-slate-700">
+          {p.name}
+        </div>
 
-        <div className="mt-3 flex items-end justify-between">
-          <div>
-            <p className="text-xs text-slate-500">Harga</p>
-            <p className="text-lg font-bold text-slate-900">
-              Rp {rupiah(product.price)}
-            </p>
+        {/* HARGA + RATING */}
+        <div className="mt-2 flex items-center justify-between">
+          {/* Harga — paling dominan */}
+          <div className="text-lg font-black tracking-tight text-[rgb(var(--navy-900))]">
+            {rupiah(p.price)}
           </div>
 
-          {/* CP2: Link ke dynamic route + tetap log */}
+          {/* Rating — kecil & rapi */}
+          <div className="flex items-center gap-1 text-[11px]">
+            <Star size={14} className="text-amber-500" />
+            <span className="font-bold text-slate-700">
+              {ratingValue.toFixed(1)}
+            </span>
+            <span className="text-slate-300">•</span>
+            <span className="font-medium text-slate-500">
+              {soldValue} terjual
+            </span>
+          </div>
+        </div>
+
+        {/* ACTION BUTTONS */}
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          <button
+            onClick={handleBuyWA}
+            disabled={p.stock === 0}
+            className="h-11 rounded-xl bg-[rgb(var(--navy-900))] text-sm font-extrabold text-white transition hover:opacity-90 disabled:opacity-50"
+          >
+            Beli
+          </button>
+
           <Link
-            to={`/detail-produk/${product.id}`}
-            onClick={() => console.log("Open detail:", product.id)}
-            className="text-sm px-3 py-2 rounded-2xl border border-slate-200 hover:bg-slate-50 active:scale-[0.98] transition"
+            to={`/detail-produk/${p.id}`}
+            className="grid h-11 place-items-center rounded-xl border border-slate-200 bg-white text-sm font-extrabold text-slate-700 transition hover:bg-slate-50"
           >
             Detail
           </Link>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-3">
-          <button
-            onClick={() => onBuy(product)}
-            disabled={!inStock}
-            className="rounded-2xl bg-slate-900 text-white py-3 font-medium hover:bg-slate-800 active:scale-[0.98] transition disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Beli
-          </button>
-
-          <button
-            onClick={() => onFav(product)}
-            className="rounded-2xl border border-slate-200 py-3 font-medium hover:bg-slate-50 active:scale-[0.98] transition"
-          >
-            ❤ Favorit
-          </button>
-        </div>
+        {/* CART */}
+        <button
+          onClick={() => addItem(p)}
+          disabled={p.stock === 0}
+          className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white text-sm font-extrabold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
+        >
+          <ShoppingCart size={18} />
+          Tambah ke Keranjang
+        </button>
       </div>
     </div>
   );

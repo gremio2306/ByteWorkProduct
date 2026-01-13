@@ -1,4 +1,6 @@
 // src/data/dummyProducts.jsx
+export const CATEGORIES = ["All", "Acoustic", "Electric", "Ukulele", "Accessories"];
+
 const dummyProducts = [
   {
     id: 1,
@@ -7,6 +9,8 @@ const dummyProducts = [
     price: 1450000,
     stock: 8,
     image: "https://picsum.photos/seed/yamaha-f310/900/600",
+    rating: 4.8,
+    sold: 480,
   },
   {
     id: 2,
@@ -15,6 +19,8 @@ const dummyProducts = [
     price: 3950000,
     stock: 4,
     image: "https://picsum.photos/seed/squier-strat/900/600",
+    rating: 4.7,
+    sold: 260,
   },
   {
     id: 3,
@@ -23,6 +29,8 @@ const dummyProducts = [
     price: 450000,
     stock: 10,
     image: "https://picsum.photos/seed/mahalo-uke/900/600",
+    rating: 4.6,
+    sold: 310,
   },
   {
     id: 4,
@@ -31,6 +39,8 @@ const dummyProducts = [
     price: 1650000,
     stock: 6,
     image: "https://picsum.photos/seed/cort-ad810/900/600",
+    rating: 4.7,
+    sold: 195,
   },
   {
     id: 5,
@@ -39,6 +49,8 @@ const dummyProducts = [
     price: 2850000,
     stock: 3,
     image: "https://picsum.photos/seed/ibanez-grx70qa/900/600",
+    rating: 4.8,
+    sold: 140,
   },
   {
     id: 6,
@@ -47,6 +59,8 @@ const dummyProducts = [
     price: 520000,
     stock: 0,
     image: "https://picsum.photos/seed/kala-soprano/900/600",
+    rating: 4.5,
+    sold: 120,
   },
   {
     id: 7,
@@ -55,6 +69,8 @@ const dummyProducts = [
     price: 95000,
     stock: 25,
     image: "https://picsum.photos/seed/daddario-strings/900/600",
+    rating: 4.9,
+    sold: 980,
   },
   {
     id: 8,
@@ -63,6 +79,8 @@ const dummyProducts = [
     price: 45000,
     stock: 18,
     image: "https://picsum.photos/seed/capo-aluminium/900/600",
+    rating: 4.8,
+    sold: 640,
   },
   {
     id: 9,
@@ -71,7 +89,20 @@ const dummyProducts = [
     price: 120000,
     stock: 12,
     image: "https://picsum.photos/seed/guitar-stand/900/600",
+    rating: 4.7,
+    sold: 410,
+  },
+  {
+    id: 10,
+    name: "Fender CD-60S Akustik",
+    category: "Acoustic",
+    price: 1850000,
+    stock: 5,
+    image: "https://picsum.photos/seed/fender-cd60s/900/600",
+    rating: 4.8,
+    sold: 155,
   },
 ];
 
 export default dummyProducts;
+export { dummyProducts };
