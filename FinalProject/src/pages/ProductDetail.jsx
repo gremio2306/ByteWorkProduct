@@ -38,7 +38,7 @@ function Pill({ children, tone = "slate" }) {
 
 function InfoCard({ icon: Icon, title, desc }) {
   return (
-    <div className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+    <div className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="grid h-10 w-10 place-items-center rounded-xl bg-slate-50">
         <Icon className="h-5 w-5 text-slate-700" />
       </div>
@@ -131,7 +131,7 @@ export default function ProductDetail() {
 
         {/* MAIN GRID */}
         <div className="grid items-stretch gap-6 lg:grid-cols-12">
-          {/* IMAGE (✅ disamakan tinggi dengan card kanan di layar besar) */}
+          {/* IMAGE (BANNER — JANGAN DIUBAH SAMA SEKALI) */}
           <div className="lg:col-span-7">
             <div
               className="
@@ -168,9 +168,9 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          {/* DETAIL (✅ tidak diubah isi) */}
-          <div className="lg:col-span-5">
-            <div className="h-full rounded-3xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col">
+          {/* DETAIL (tinggi disamakan dengan banner) */}
+          <div className="lg:col-span-5 lg:h-[560px]">
+            <div className="h-full rounded-3xl border border-slate-200 bg-white p-6 shadow-sm flex min-h-0 flex-col">
               <div>
                 <h1 className="text-2xl font-black text-slate-900">
                   {product.name}
@@ -188,7 +188,10 @@ export default function ProductDetail() {
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-3">
                   <StatBox label="Kategori" value={product.category} />
-                  <StatBox label="Stok" value={isOut ? "0 (Habis)" : product.stock} />
+                  <StatBox
+                    label="Stok"
+                    value={isOut ? "0 (Habis)" : product.stock}
+                  />
                   <StatBox label="Estimasi" value="1–3 hari" />
                 </div>
 
@@ -215,17 +218,30 @@ export default function ProductDetail() {
                 </div>
               </div>
 
-              <div className="flex-1" />
+              {/* spacer */}
+              <div className="flex-1 min-h-0" />
 
+              {/* CATATAN PRODUK (tanpa scroll, dibuat minimal) */}
               <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div className="text-sm font-extrabold text-slate-900">
                   Catatan Produk
                 </div>
-                <ul className="mt-2 space-y-1 text-sm text-slate-600">
-                  <li>• Foto pakai URL dari MockAPI (picsum / pinterest).</li>
-                  <li>• Harga & stok diambil dari API.</li>
-                  <li>• Checkout bisa disambung ke WhatsApp.</li>
+
+                <ul className="mt-2 space-y-2 text-sm text-slate-600">
+                  <li>
+                    • Material <b>laminated wood</b> untuk karakter suara hangat & stabil.
+                  </li>
+                  <li>
+                    • <b>Neck ergonomis</b>, nyaman untuk pemula dan latihan rutin.
+                  </li>
+                  <li>
+                    • <b>Steel-string</b> dengan respon jelas untuk strumming.
+                  </li>
                 </ul>
+
+                <div className="mt-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs font-semibold text-slate-600">
+                  Tips: Simpan di tempat kering dan lap senar setelah dipakai.
+                </div>
               </div>
             </div>
           </div>
