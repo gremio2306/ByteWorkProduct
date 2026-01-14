@@ -120,12 +120,12 @@ export default function AdminHome() {
             <div className="mt-1 text-sm">
               {computed.stokHabis > 0 && (
                 <div>
-                  • Produk stok habis: <b>{computed.stokHabis}</b>
+                   Produk stok habis: <b>{computed.stokHabis}</b>
                 </div>
               )}
               {computed.stokRendah > 0 && (
                 <div>
-                  • Produk stok rendah (&lt; 3): <b>{computed.stokRendah}</b>
+                 Produk stok rendah (&lt; 3): <b>{computed.stokRendah}</b>
                 </div>
               )}
             </div>

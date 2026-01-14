@@ -8,12 +8,12 @@ import {
   addProduct,
   updateProduct,
   deleteProduct,
-} from "../services/productsApi"; // ✅ sesuaikan kalau nama file beda
+} from "../services/productsApi"; 
 
 export default function AdminDashboard() {
   const [data, setData] = useState([]);
   const [query, setQuery] = useState("");
-  const [mode, setMode] = useState("add"); // add | edit
+  const [mode, setMode] = useState("add"); 
   const [selected, setSelected] = useState(null);
 
   // async state (CP3)

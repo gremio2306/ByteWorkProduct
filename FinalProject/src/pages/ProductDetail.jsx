@@ -229,13 +229,13 @@ export default function ProductDetail() {
 
                 <ul className="mt-2 space-y-2 text-sm text-slate-600">
                   <li>
-                    • Material <b>laminated wood</b> untuk karakter suara hangat & stabil.
+                    Material <b>laminated wood</b> untuk karakter suara hangat & stabil.
                   </li>
                   <li>
-                    • <b>Neck ergonomis</b>, nyaman untuk pemula dan latihan rutin.
+                    <b>Neck ergonomis</b>, nyaman untuk pemula dan latihan rutin.
                   </li>
                   <li>
-                    • <b>Steel-string</b> dengan respon jelas untuk strumming.
+                    <b>Steel-string</b> dengan respon jelas untuk strumming.
                   </li>
                 </ul>
 
